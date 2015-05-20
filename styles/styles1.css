@@ -1,0 +1,16 @@
+body{
+	font-family:helvetica;
+	padding: 0;
+}
+#wrapper{
+	width:800px;
+	margin: 0px auto;
+}
+#contractTypeList{
+	list-style-type:none;
+}
+
+input{
+	
+	margin:2px 0px;
+}
