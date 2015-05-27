@@ -52,13 +52,14 @@ function createCORSRequest(url, method, data, callback, errback) {
  
         if('withCredentials' in xhr) {
             xhr.open(method, url, true);
-            errback(xhr.onerror);
+			xhr.setRequestHeader("Content-type", "application/xml");
+            xhr.onerror = errback;
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 400) {
                         callback(xhr.responseText);
                     } else {
-                        errback(new Error('Response returned with non-OK status'));
+                        console.log(new Error('Response returned with non-OK status'));
                     }
                 }
             };
@@ -67,13 +68,13 @@ function createCORSRequest(url, method, data, callback, errback) {
     } else if(XDomainrequest) {
         xhr = new XDomainrequest();
         xhr.open(method, url);
-        errback(xhr.onerror);
+		xhr.onerror = errback;
         xhr.onload = function() {
             callback(xhr.responseText);
         };
         xhr.send(data);
     } else {
-        errback(new Error('CORS not supported'));
+        console.log(new Error('CORS not supported'));
     }
 }
 
@@ -132,7 +133,7 @@ var callAPI = function(){
 	 </Accessorials>\
 	</tns:RatingRequest>";
 	var log = function (x) {console.log(x)};
-	var xhr = createCORSRequest(url, method, data, log(),log());
+	var xhr = createCORSRequest(url, method, data, log());
 }
 
 
