@@ -3,20 +3,20 @@ console.log("JavaScript Loaded");
 var url = "";
 var user = "";
 var pass = "";
-var contractTypeList = ""
-var month = ""
-var day = ""
-var year = ""
-var hour = ""
-var minute = ""
-var oZip = ""
-var oCountry = ""
-var dZip = ""
-var dCountry = ""
-var hazmat = false
-var piece = ""
-var weight = ""
-var freightClass = ""
+var contractTypeList = "";
+var month = "";
+var day = "";
+var year = "";
+var hour = "";
+var minute = "";
+var oZip = "";
+var oCountry = "";
+var dZip = "";
+var dCountry = "";
+var hazmat = false;
+var piece = "";
+var weight = "";
+var freightClass = "";
 
 var setValues = function(){
 	url = $("#url").val();
@@ -52,7 +52,7 @@ function createCORSRequest(url, method, data, callback, errback) {
  
         if('withCredentials' in xhr) {
             xhr.open(method, url, true);
-            xhr.onerror = errback;
+            errback(xhr.onerror);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 400) {
@@ -67,7 +67,7 @@ function createCORSRequest(url, method, data, callback, errback) {
     } else if(XDomainrequest) {
         xhr = new XDomainrequest();
         xhr.open(method, url);
-        xhr.onerror = errback;
+        errback(xhr.onerror);
         xhr.onload = function() {
             callback(xhr.responseText);
         };
@@ -132,7 +132,7 @@ var callAPI = function(){
 	 </Accessorials>\
 	</tns:RatingRequest>";
 	var log = function (x) {console.log(x)};
-	var xhr = createCORSRequest(url, method, data, log());
+	var xhr = createCORSRequest(url, method, data, log(),log());
 }
 
 
