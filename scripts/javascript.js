@@ -1,6 +1,6 @@
 console.log("JavaScript Loaded");
 
-var url = "";
+var urlPassed = "";
 var user = "";
 var pass = "";
 var contractTypeList = "";
@@ -18,8 +18,10 @@ var piece = "";
 var weight = "";
 var freightClass = "";
 
+
 var setValues = function(){
-	url = $("#url").val();
+	contractTypeList = "";
+	urlPassed = $("#url1").val();
 	user = $("#user").val();
 	pass = $("#pass").val();
 	$('input[name=contractType]').each(function(){
@@ -44,9 +46,42 @@ var setValues = function(){
 	freightClass = $("#class").val();
 };
 
+function displayRates(rates){
+	//$("#success").html(rates).fadeIn();
+	console.log("Displayed");
+	var output ="";
+	counter = 1;
+	//for each Rate
+	$(rates).find("Rate").each( function(){
+
+		if($(this).find("ContractInfo > Id").text() != ""){
+
+			output += "Rate "+ counter +":<br />"
+
+			if($(this).find("ContractInfo > Id").text() != ""){
+				output +=  "Contract ID "+$(this).find("ContractInfo > Id").text() +" - " +$(this).find("ContractInfo > Description").text()+"<br />";
+			}
+			
+			if($(this).find("CarrierTradingPartner > Name").text() != ""){
+				output +=  "Carrier: "+$(this).find("CarrierTradingPartner > Name").text() +"<br />";
+			}
+
+			output += "<hr />"
+			counter++;
+		}
+
+	});
+	//display created string to #success
+	if(output!= ""){
+		$("#success").html(output).fadeIn();
+	}
+}
+
 function createCORSRequest(url, method, data, callback, errback) {
     var xhr;
     
+
+
     if(XMLHttpRequest) {
         xhr = new XMLHttpRequest();
  
@@ -57,7 +92,7 @@ function createCORSRequest(url, method, data, callback, errback) {
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status >= 200 && xhr.status < 400) {
-                        callback(xhr.responseText);
+                    	displayRates(xhr.responseText);
                     } else {
                         console.log(new Error('Response returned with non-OK status'));
                     }
@@ -70,7 +105,7 @@ function createCORSRequest(url, method, data, callback, errback) {
         xhr.open(method, url);
 		xhr.onerror = errback;
         xhr.onload = function() {
-            callback(xhr.responseText);
+             console.log(xhr.responseText);
         };
         xhr.send(data);
     } else {
@@ -79,37 +114,37 @@ function createCORSRequest(url, method, data, callback, errback) {
 }
 
 var callAPI = function(){
-	var url = 'http://online-sb.3gtms.com/web/services/rating/findRates?username=sanity&password=trans1te';
+	var url = 'http://'+urlPassed+'/web/services/rating/findRates?username='+user+'&password='+pass;
 	var method = 'POST';
 	var data = "<?xml version='1.0' encoding='UTF-8'?>\
 	<tns:RatingRequest xmlns:tns='http://schemas.3gtms.com/tms/v1/services/rating' xmlns:tns1='http://schemas.3gtms.com/tms/v1/services/rating' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://schemas.3gtms.com/tms/v1/services/rating 3GTMSRatingRequest.xsd '>\
 	  <RequestToken>Sample 1.0</RequestToken>\
 	  <Configuration> \
-		<ContractUse>BlanketCost BlanketBilling </ContractUse>\
+		<ContractUse>"+contractTypeList+"</ContractUse>\
 	 <ContractStatus>InProduction</ContractStatus>\
 		<SkipCarrierSafetyChecks>true</SkipCarrierSafetyChecks><EnableRoutingGuides>false</EnableRoutingGuides>\
 	 <Parcel>\
 	 </Parcel>\
 	  </Configuration>\
-	  <PickupDate>2015-03-15T13:30:01-04:00</PickupDate> \
+	  <PickupDate>"+year+"-"+month+"-"+day+"T"+hour+":"+minute+":01-04:00</PickupDate> \
 	  <Stops>    \
 		<Stop>\
-		  <Index>1</Index> <Location><City>Chattanooga</City>\
-			<State><Code>TN</Code></State>\
-	<PostalCode/>\
-	<Country><FipsCode>US</FipsCode></Country><RoutingGuideGroup/>\
+		  <Index>1</Index><Location><City></City>\
+			<State><Code></Code></State>\
+			<PostalCode>"+oZip+"</PostalCode>\
+	<Country><FipsCode>"+oCountry+"</FipsCode></Country><RoutingGuideGroup/>\
 		  </Location>\
 		</Stop>    \
 		<Stop>\
 		  <Index>2</Index> <Location><City></City>\
 			<State><Code></Code></State>\
-			<PostalCode> 27612</PostalCode>\
-			<Country><FipsCode>US</FipsCode></Country><RoutingGuideGroup/>\
+			<PostalCode>"+dZip+"</PostalCode>\
+			<Country><FipsCode>"+dCountry+"</FipsCode></Country><RoutingGuideGroup/>\
 		  </Location>\
 		</Stop>\
 	  </Stops>\
 	  <Freight>\
-		<Hazmat>false</Hazmat>    \
+		<Hazmat>"+hazmat+"</Hazmat>    \
 	   <TotalPallets>1</TotalPallets>\
 		<PalletPositions>\
 		  <PalletPosition>\
@@ -122,10 +157,10 @@ var callAPI = function(){
 		<TotalTrailerLengthUsage UOM='Ft'>0</TotalTrailerLengthUsage>\
 		<LineItems>\
 				<LineItem>\
-			<PieceCount>1</PieceCount>\
-			<NetWeight UOM='Lb'>1000</NetWeight>\
-			<GrossWeight UOM='Lb'>1000</GrossWeight>\
-			<FreightClassification>55</FreightClassification>\
+			<PieceCount>"+piece+"</PieceCount>\
+			<NetWeight UOM='Lb'>"+weight+"</NetWeight>\
+			<GrossWeight UOM='Lb'>"+weight+"</GrossWeight>\
+			<FreightClassification>"+freightClass+"</FreightClassification>\
 			</LineItem>\
 		</LineItems>\
 	  </Freight>\
@@ -133,7 +168,8 @@ var callAPI = function(){
 	 </Accessorials>\
 	</tns:RatingRequest>";
 	var log = function (x) {console.log(x)};
-	var xhr = createCORSRequest(url, method, data, log());
+	var xhr = createCORSRequest(url, method, data, log(), log());
+
 }
 
 
@@ -144,9 +180,11 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+
 	$("#buttSubmit").click(function(){
+		$(".alert").hide();
 		setValues();
 		callAPI();
-		console.log(url + user + pass + contractTypeList + month + day + year + hour + minute + oZip + oCountry + dZip + dCountry + hazmat + piece + weight + freightClass);
+		//console.log(urlPassed + user + pass + contractTypeList + month + day + year + hour + minute + oZip + oCountry + dZip + dCountry + hazmat + piece + weight + freightClass);
 	});
 });

@@ -7,6 +7,17 @@
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"> </script>
 	<script src="scripts/javascript.js"></script>
+	 <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  	<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
 	
 	
 </head>
@@ -14,21 +25,21 @@
 <body>
 	<div id ="wrapper">
 		<img src="http://www.3gtms.com/tmsimages/custom/3GTMS/images/3GTMSLogo.jpg" alt="3Gtms"/>
-		<form id="rateForm">
+		<form id="rateForm" method="post">
 			<label for="url">URL</label>
-			<input type="text" id="url" placeholder="Instance URL"/>
+			<input type="text" id="url1" placeholder="example.3gtms.com" value="online.3gtms.com"/>
 			<label for="username">UserName</label>
-			<input type="text" id="user" placeholder="username"/>
+			<input type="text" id="user" placeholder="username" value="sanity"/>
 			<label for="password">Password</label>
-			<input type="password" id="pass" placeholder="password"/>
+			<input type="password" id="pass" placeholder="password" />
 			<br />
 			<br />
 			<br />
 			<label for="contractType">Contract Type</label>
 			<ul id="contractTypeList">
-				<li><input type="checkbox" name="contractType" value="BlanketCost">Blanket Cost</input></li>
+				<li><input checked type="checkbox" name="contractType" value="BlanketCost">Blanket Cost</input></li>
 				<li><input type="checkbox" name="contractType" value="ClientCost">Client Cost</input></li>
-				<li><input type="checkbox" name="contractType" value="BlanketBilling">Blanket Billing</input></li>
+				<li><input checked type="checkbox" name="contractType" value="BlanketBilling">Blanket Billing</input></li>
 				<li><input type="checkbox" name="contractType" value="ClientBilling">Client Billing</input></li>
 				<li><input type="checkbox" name="contractType" value="BlanketBenchmark">Blanket Benchmark</input></li>
 				<li><input type="checkbox" name="contractType" value="ClientBenchmark">Client Benchmark</input></li>
@@ -42,7 +53,7 @@
 				<li><input type="checkbox" name="contractType" value="WebServiceClientWebBilling">WebService Client Web Billing</input></li>
 			<ul>
 			<br />
-			<label for="date">Ship Date</label>
+			<label for="date">Pick Up Date</label>
 			<select name="month">
 				<option value="01">January</option>
 				<option value="02">February</option>
@@ -187,7 +198,7 @@
 			</select>
 			<br />
 			<label for="origZip">Origin Zip</label>
-			<input class="int" type="text" id="origZip" placeholder="Origin Zip Code"/>
+			<input class="int" type="text" id="origZip" placeholder="Origin Zip Code" value="30303"/>
 			<label for="origCountry">Origin Country</label>
 			<select id="origCountry" name="origCountry">
 				<option value="US">US</option>
@@ -196,7 +207,7 @@
 			</select>
 			<br />
 			<label for="destZip">Destination Zip</label>
-			<input class="int" type="text" id="destZip" placeholder="Destination Zip Code"/>
+			<input class="int" type="text" id="destZip" placeholder="Destination Zip Code" value="60606"/>
 			<label for="destCountry">Destination Country</label>
 			<select id="destCountry" name="destCountry">
 				<option value="US">US</option>
@@ -207,9 +218,9 @@
 			<input type="checkbox" name="isHazmat" value="isHazmat">HazMat?</input>
 			<br />
 			<label for="piece">Piece</label>
-			<input class="int" type="text" id="pieceCount" placeholder="Piece Count"/>
+			<input class="int" type="text" id="pieceCount" placeholder="Piece Count" value="1"/>
 			<label for="weight">Weight</label>
-			<input class="decimal" type="text" id="netWeight" placeholder="Net Weight"/>
+			<input class="decimal" type="text" id="netWeight" placeholder="Net Weight" value="1500"/>
 			<label for="class">Class</label>
 			<select id="class" name="Class">
 				<option value="50">50</option>
@@ -220,8 +231,10 @@
 			<br />
 			<input id="buttSubmit" type="Submit" value ="Request Rates"/>
 		</form>
-		<div id="result">
-		</div>
+		<br />
+		<br />
+		<div id = "success" class="alert alert-success center result"></div>
+
 	</div>
 </body>
 
