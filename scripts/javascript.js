@@ -18,16 +18,28 @@ var piece = "";
 var weight = "";
 var freightClass = "";
 var pageType = "";
+var volume = "";
+var oLocNum = "";
+var dLocNum = "";
+var originString = "";
+var destinationString = "";
 
 
 var setValues = function(){
 	contractTypeList = "";
+	pageType = $("#clientName").val();
+	
 	urlPassed = $("#url1").val();
 	user = $("#user").val();
 	pass = $("#pass").val();
-	$('input[name=contractType]').each(function(){
-		contractTypeList = this.checked ? contractTypeList.concat($(this).val(), " ") : contractTypeList.concat("");
-	});
+	if (pageType =="jw"){
+		contractTypeList = "BlanketCost";
+	}else{
+		$('input[name=contractType]').each(function(){
+			contractTypeList = this.checked ? contractTypeList.concat($(this).val(), " ") : contractTypeList.concat("");
+		});
+	}
+	
 	
 	month = $("select[name=month]").val();
 	day = $("select[name=day]").val();
@@ -35,18 +47,26 @@ var setValues = function(){
 	hour = $("select[name=hour]").val();
 	minute = $("select[name=minute]").val();
 	
-	oZip = $("#origZip").val();
-	oCountry = $("#origCountry").val();
-	dZip = $("#destZip").val();
-	dCountry = $("#destCountry").val();
+	if($("#origLocNum").val() == ""){
+		originString = "<PostalCode>"+$("#origZip").val()+"</PostalCode><Country><FipsCode>"+$("#origCountry").val()+"</FipsCode></Country>";
+	}else{
+		originString = "<LocNum>"+$("#origLocNum").val()+"</LocNum>";
+	}
+	
+	if($("#destLocNum").val() == ""){
+		destinationString = "<PostalCode>"+$("#destZip").val()+"</PostalCode><Country><FipsCode>"+$("#destCountry").val()+"</FipsCode></Country>";
+	}else{
+		destinationString = "<LocNum>"+$("#destLocNum").val()+"</LocNum>";
+	}
 	
 	hazmat = $("#isHazmat").checked ? true : false;
 	
 	piece = $("#pieceCount").val();
 	weight = $("#netWeight").val();
+	volume = $("#netVol").val() == "" ? "" : "<NetVolume UOM='CuFt'>" + $('#netVol').val() + "</NetVolume>";
 	freightClass = $("#class").val();
 
-	pageType = $("#jw").val();
+	
 };
 
 function displayRates(rates){
@@ -75,8 +95,8 @@ function displayRates(rates){
 						output += "<td class = 'rateData'>&nbsp;</td>";
 					}
 
-					if($(this).find("Service > EstimatedDelivery").text() != ""){
-						output +=  "<td class = 'rateData'> "+$(this).find("Service > EstimatedDelivery").text().substring(0,10)+"</td>";
+					if($(this).find("Service > Service").text() != ""){
+						output +=  "<td class = 'rateData'> "+$(this).find("Service > Service").text()+"</td>";
 					}else{
 						output += "<td class = 'rateData'>&nbsp;</td>";
 					}
@@ -225,44 +245,32 @@ var callAPI = function(){
 	  <PickupDate>"+year+"-"+month+"-"+day+"T"+hour+":"+minute+":01-04:00</PickupDate> \
 	  <Stops>    \
 		<Stop>\
-		  <Index>1</Index><Location><City></City>\
-			<State><Code></Code></State>\
-			<PostalCode>"+oZip+"</PostalCode>\
-	<Country><FipsCode>"+oCountry+"</FipsCode></Country><RoutingGuideGroup/>\
+		  <Index>1</Index><Location><City/>\
+			"+originString+"><RoutingGuideGroup/>\
 		  </Location>\
 		</Stop>    \
 		<Stop>\
-		  <Index>2</Index> <Location><City></City>\
-			<State><Code></Code></State>\
-			<PostalCode>"+dZip+"</PostalCode>\
-			<Country><FipsCode>"+dCountry+"</FipsCode></Country><RoutingGuideGroup/>\
+		  <Index>2</Index> <Location><City/>\
+			"+destinationString+"<RoutingGuideGroup/>\
 		  </Location>\
 		</Stop>\
 	  </Stops>\
 	  <Freight>\
 		<Hazmat>"+hazmat+"</Hazmat>    \
-	   <TotalPallets>1</TotalPallets>\
-		<PalletPositions>\
-		  <PalletPosition>\
-			<PositionCount>1</PositionCount>\
-			<AdjustedPositionCount>1</AdjustedPositionCount>\
-			<PositionWeight UOM='Lb'>1000</PositionWeight>\
-		  </PalletPosition>\
-		</PalletPositions>\
-		<TotalArea UOM='SqFt'>1</TotalArea>\
-		<TotalTrailerLengthUsage UOM='Ft'>0</TotalTrailerLengthUsage>\
 		<LineItems>\
 				<LineItem>\
 			<PieceCount>"+piece+"</PieceCount>\
 			<NetWeight UOM='Lb'>"+weight+"</NetWeight>\
 			<GrossWeight UOM='Lb'>"+weight+"</GrossWeight>\
 			<FreightClassification>"+freightClass+"</FreightClassification>\
+			"+volume+"\
 			</LineItem>\
 		</LineItems>\
 	  </Freight>\
 	  <Accessorials>\
 	 </Accessorials>\
 	</tns:RatingRequest>";
+	console.log(data);
 	var log = function (x) {console.log(x)};
 	var xhr = createCORSRequest(url, method, data, log(), log());
 

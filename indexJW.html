@@ -23,7 +23,7 @@
 </head>
 
 <body>
-	<input type="text" id="jw"  value="jw"/>
+	<input type="text" id="clientName"  value="jw"/>
 	<div id ="wrapper">
 		<img src="http://www.3gtms.com/tmsimages/custom/3GTMS/images/3GTMSLogo.jpg" alt="3Gtms"/>
 		<br />
@@ -32,14 +32,10 @@
 			<label for="url">URL</label>
 			<input type="text" id="url1" placeholder="example.3gtms.com" value="demo.3gtms.com"/>
 			<label for="username">UserName</label>
-			<input type="text" id="user" placeholder="username" value="admin"/>
+			<input type="text" id="user" placeholder="username" value="demo"/>
 			<label for="password">Password</label>
 			<input type="password" id="pass" placeholder="password" />
 			<br />
-			
-			<label for="contractType">Contract Type</label>
-			<input checked type="checkbox" name="contractType" value="BlanketCost">Blanket Cost</input>
-			<br/>
 			
 			<label for="date">Pick Up Date</label>
 			<select name="month">
@@ -193,7 +189,8 @@
 				<option value="CA">CA</option>
 				<option value="MX">MX</option>
 			</select>
-			<label for="origZip">Origin Loc Num</label>
+			<br />
+			<label for="origLocNum">Origin Loc Num</label>
 			<input class="int" type="text" id="origLocNum" placeholder="LocNumber" value=""/>
 			<br />
 			<label for="destZip">Destination Zip</label>
@@ -204,7 +201,8 @@
 				<option value="CA">CA</option>
 				<option value="MX">MX</option>
 			</select>
-			<label for="origZip">Dest Loc Num</label>
+			<br />
+			<label for="destLocNum">Dest Loc Num</label>
 			<input class="int" type="text" id="destLocNum" placeholder="LocNumber" value=""/>
 			
 			<br />
@@ -214,7 +212,7 @@
 			<input class="int" type="text" id="pieceCount" placeholder="Piece Count" value="1"/>
 			<label for="weight">Weight</label>
 			<input class="decimal" type="text" id="netWeight" placeholder="Net Weight" value="1500"/>
-			<label for="weight">Volume</label>
+			<label for="netVol">Volume</label>
 			<input class="decimal" type="text" id="netVol" placeholder="Net Volume" value="100"/>
 			<label for="class">Class</label>
 			<select id="class" name="Class">

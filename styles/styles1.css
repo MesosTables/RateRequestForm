@@ -15,7 +15,7 @@ input{
 	margin:2px 0px;
 }
 
-#jw{
+#clientName{
 	display: none;
 }
 .alert{
@@ -24,4 +24,19 @@ input{
 #rateReturn table{
 	table-layout: auto;
 	width: 100%;
+}
+tr{
+	width: 100%;
+}
+td, th{
+	width: 15%;
+}
+
+td:nth-child(3), th:nth-child(3){
+	width: 50%;
+
+}
+td:nth-child(2), th:nth-child(2){
+	width: 25%;
+
 }
