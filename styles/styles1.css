@@ -7,13 +7,21 @@ body{
 	margin: 0px auto;
 }
 #contractTypeList{
-	list-style-type:none;
+	
 }
 
 input{
 	
 	margin:2px 0px;
 }
+
+#jw{
+	display: none;
+}
 .alert{
-	display:none;
+	display: none;
+}
+#rateReturn table{
+	table-layout: auto;
+	width: 100%;
 }

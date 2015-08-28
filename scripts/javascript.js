@@ -17,6 +17,7 @@ var hazmat = false;
 var piece = "";
 var weight = "";
 var freightClass = "";
+var pageType = "";
 
 
 var setValues = function(){
@@ -44,38 +45,132 @@ var setValues = function(){
 	piece = $("#pieceCount").val();
 	weight = $("#netWeight").val();
 	freightClass = $("#class").val();
+
+	pageType = $("#jw").val();
 };
 
 function displayRates(rates){
 	//$("#success").html(rates).fadeIn();
 	console.log("Displayed");
+	console.log(rates);
 	var output ="";
 	counter = 1;
 	//for each Rate
-	$(rates).find("Rate").each( function(){
+	if(pageType=="jw"){
+		if($(rates).find("Success").text() == "true" && $(rates).find("Rate").text() != ""){
+			output+="<table id='rateReturn'><tr><th class = 'rateData'>&nbsp;</th><th class = 'rateData'>Carrier</th><th class = 'rateData'>Service</th><th class = 'rateData'>Number</th></tr>";
+			$(rates).find("Rate").each( function(){
+				
+				
 
-		if($(this).find("ContractInfo > Id").text() != ""){
+				if($(this).find("ValidRate").text() == "true"){
 
-			output += "Rate "+ counter +":<br />"
+					output += "<tr>";
 
-			if($(this).find("ContractInfo > Id").text() != ""){
-				output +=  "Contract ID "+$(this).find("ContractInfo > Id").text() +" - " +$(this).find("ContractInfo > Description").text()+"<br />";
-			}
-			
-			if($(this).find("CarrierTradingPartner > Name").text() != ""){
-				output +=  "Carrier: "+$(this).find("CarrierTradingPartner > Name").text() +"<br />";
-			}
+					output += "<tr><td class = 'rateData'>Rate "+ counter +"</td>";
 
-			output += "<hr />"
-			counter++;
+					if($(this).find("CarrierTradingPartner > Name").text() != ""){
+						output +=  "<td class = 'rateData'>"+$(this).find("CarrierTradingPartner > Name").text() +"</td>" ;
+					}else{
+						output += "<td class = 'rateData'>&nbsp;</td>";
+					}
+
+					if($(this).find("Service > EstimatedDelivery").text() != ""){
+						output +=  "<td class = 'rateData'> "+$(this).find("Service > EstimatedDelivery").text().substring(0,10)+"</td>";
+					}else{
+						output += "<td class = 'rateData'>&nbsp;</td>";
+					}
+
+
+					if($(this).find("Pricing > StrategyNetRate").text() != ""){
+						output +=  "<td class = 'rateData'>"+parseFloat($(this).find("Pricing > StrategyNetRate").text()).toFixed(2) + " </td> ";
+					}else{
+						output += "<td class = 'rateData'>&nbsp;</td>";
+					}
+
+					output += "</tr>";
+					counter++;
+				}
+
+
+
+			});
+			output += "</table>";
+		}else if( $(rates).find("Messages > Message > Content").text() != ""){
+			displayError("Rating did NOT succeed. <br />"+ $(rates).find("Messages > Message > Content").text());
+
+		}else {
+			displayError("No Valid Rates");
 		}
 
-	});
-	//display created string to #success
-	if(output!= ""){
-		$("#success").html(output).fadeIn();
+		if(output!= ""){
+			$("#success1").html(output).fadeIn();
+		}
+
+	}else{
+		if($(rates).find("Success").text() == "true" && $(rates).find("Rate").text() != ""){
+			$(rates).find("Rate").each( function(){
+				
+				output ="";
+
+				if($(this).find("ValidRate").text() == "true"){
+
+					output += "Rate "+ counter +":<br />"
+
+					if($(this).find("ContractInfo > Id").text() != ""){
+						output +=  "Contract ID: "+$(this).find("ContractInfo > Id").text() 
+						+" || Description: " +$(this).find("ContractInfo > Description").text()+"<br />";
+					}
+					
+					if($(this).find("ContractInfo > Strategy > Id").text() != ""){
+						output +=  "Strategy ID: "+$(this).find("ContractInfo > Strategy > Id").text() 
+						+ " || Seq: " +$(this).find("ContractInfo > Strategy > Sequence").text()
+						+" || Description: " +$(this).find("ContractInfo > Strategy > Description").text()+"<br />";
+					}
+
+					if($(this).find("CarrierTradingPartner > Name").text() != ""){
+						output +=  "Carrier: "+$(this).find("CarrierTradingPartner > Name").text() 
+						+" || RateType: " +$(this).find("ContractInfo > Strategy > RatingType").text()
+						+" || Mode: " +$(this).find("ContractInfo > Strategy > TransportMode").text()+"<br />";
+					}
+
+					if($(this).find("Pricing > StrategyNetRate").text() != ""){
+
+						var rate = ($(this).find("Pricing > LineItemRates > LineItemRate > Rate ").text() != "")? " || Rate: "+ $(this).find("Pricing > LineItemRates > LineItemRate > Rate ").text() : "";
+
+						output +=  "Rate: $"+parseFloat($(this).find("Pricing > StrategyNetRate").text()).toFixed(2)
+						+ " || Description: "+$(this).find("Pricing > RatingDescription").text() 
+						+  rate +"<br />";
+					}
+
+					if($(this).find("Service > EstimatedDelivery").text() != ""){
+						output +=  "Estimated Delivery: "+$(this).find("Service > EstimatedDelivery").text().substring(0,10) 
+						+" || Miles: "+$(this).find("Distance > TotalDistance").text();
+					}
+
+					counter++;
+				}
+
+				if(output!= ""){
+					$("#success"+counter).html(output).fadeIn();
+				}
+
+			});
+		}else if( $(rates).find("Messages > Message > Content").text() != ""){
+			displayError("Rating did NOT succeed. <br />"+ $(rates).find("Messages > Message > Content").text());
+
+		}else {
+			displayError("No Valid Rates");
+		}
 	}
+	
+	console.log(output);
 }
+
+function displayError(e1){
+	$("#error1").html(e1).fadeIn();
+}
+
 
 function createCORSRequest(url, method, data, callback, errback) {
     var xhr;
@@ -94,7 +189,8 @@ function createCORSRequest(url, method, data, callback, errback) {
                     if (xhr.status >= 200 && xhr.status < 400) {
                     	displayRates(xhr.responseText);
                     } else {
-                        console.log(new Error('Response returned with non-OK status'));
+                        console.log();
+                        displayError( new Error('Response returned with non-OK status'));
                     }
                 }
             };

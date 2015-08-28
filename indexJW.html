@@ -23,6 +23,7 @@
 </head>
 
 <body>
+	<input type="text" id="jw"  value="jw"/>
 	<div id ="wrapper">
 		<img src="http://www.3gtms.com/tmsimages/custom/3GTMS/images/3GTMSLogo.jpg" alt="3Gtms"/>
 		<br />
@@ -37,37 +38,9 @@
 			<br />
 			
 			<label for="contractType">Contract Type</label>
-			<table id="contractTypeList">
-				<tr>
-					<td><input checked type="checkbox" name="contractType" value="BlanketCost">Blanket Cost</input></td>
-					<td><input type="checkbox" name="contractType" value="ClientCost">Client Cost</input></td>
-				</tr>
-				<tr>
-					<td><input checked type="checkbox" name="contractType" value="BlanketBilling">Blanket Billing</input></td>
-					<td><input type="checkbox" name="contractType" value="ClientBilling">Client Billing</input></td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" name="contractType" value="BlanketBenchmark">Blanket Benchmark</input></td>
-					<td><input type="checkbox" name="contractType" value="ClientBenchmark">Client Benchmark</input></td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" name="contractType" value="WebServiceBlanketAnalysis">WebService Blanket Analysis </input></td>
-					<td><input type="checkbox" name="contractType" value="WebServiceClientAnalysis">WebService Client Analysis</input></td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" name="contractType" value="WebServiceBlanketFreightAudit">WebService Blanket Freight Audit &nbsp; &nbsp; &nbsp;</input></td>
-					<td><input type="checkbox" name="contractType" value="WebServiceClientFreightAudit">WebService Client Freight Audit &nbsp; &nbsp; &nbsp;</input></td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" name="contractType" value="WebServiceBlanketWebCost">WebService Blanket Web Cost</input></td>
-					<td><input type="checkbox" name="contractType" value="WebServiceClientWebCost">WebService Client Web Cost</input></td>
-				</tr>
-				<tr>
-					<td><input type="checkbox" name="contractType" value="WebServiceBlanketWebBilling">WebService Blanket Web Billing</input></td>
-					<td><input type="checkbox" name="contractType" value="WebServiceClientWebBilling">WebService Client Web Billing</input></td>
-				</tr>
-			</table>
-			<br />
+			<input checked type="checkbox" name="contractType" value="BlanketCost">Blanket Cost</input>
+			<br/>
+			
 			<label for="date">Pick Up Date</label>
 			<select name="month">
 				<option value="01">January</option>
@@ -220,6 +193,8 @@
 				<option value="CA">CA</option>
 				<option value="MX">MX</option>
 			</select>
+			<label for="origZip">Origin Loc Num</label>
+			<input class="int" type="text" id="origLocNum" placeholder="LocNumber" value=""/>
 			<br />
 			<label for="destZip">Destination Zip</label>
 			<input class="int" type="text" id="destZip" placeholder="Destination Zip Code" value="60606"/>
@@ -229,6 +204,9 @@
 				<option value="CA">CA</option>
 				<option value="MX">MX</option>
 			</select>
+			<label for="origZip">Dest Loc Num</label>
+			<input class="int" type="text" id="destLocNum" placeholder="LocNumber" value=""/>
+			
 			<br />
 			<input type="checkbox" name="isHazmat" value="isHazmat">HazMat?</input>
 			<br />
@@ -236,6 +214,8 @@
 			<input class="int" type="text" id="pieceCount" placeholder="Piece Count" value="1"/>
 			<label for="weight">Weight</label>
 			<input class="decimal" type="text" id="netWeight" placeholder="Net Weight" value="1500"/>
+			<label for="weight">Volume</label>
+			<input class="decimal" type="text" id="netVol" placeholder="Net Volume" value="100"/>
 			<label for="class">Class</label>
 			<select id="class" name="Class">
 				<option value="50">50</option>
@@ -250,7 +230,8 @@
 		<br />
 		<div id = "error1" class="alert alert-danger"></div>
 		<div id = "error2" class="alert alert-danger"></div>
-		<div id = "success1" class="alert alert-success center result"></div>
+		<div id = "success1" class="alert alert-success center result">
+		</div>
 		<div id = "success2" class="alert alert-success center result"></div>
 		<div id = "success3" class="alert alert-success center result"></div>
 		<div id = "success4" class="alert alert-success center result"></div>
